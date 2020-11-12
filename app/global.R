@@ -48,7 +48,7 @@ plotly_input_vars_race <- c('Total Offenders','Total Victims','Black Offenders',
                             'Native American Offenders','Native American Victims')
 plotly_input_vars_sex <- c('Total Offenders','Total Victims','Male Offenders','Male Victims','Female Offenders','Female Victims')
 
-# Ordered Variables for pie chart selections
+# Ordered variables for pie chart selections
 customOrder_census_race <- c('Black','White','Asian/Pacific Islander','Native American','Other')
 customOrder_off_race <- c('Black','White','Asian/Pacific Islander','Native American','Race Unknown')
 customOrder_vic_race <- c('Black','White','Asian/Pacific Islander','Native American','Race Unknown')
