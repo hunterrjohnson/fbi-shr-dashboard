@@ -2,9 +2,9 @@
 
 #====================================================================================================
 
-source('R/ui.R', local = TRUE)
-source('R/server.R')
-source('R/global.R')
+source('ui.R', local = TRUE)
+source('server.R')
+source('global.R')
 
 shinyApp(
   ui = shr_ui,

@@ -3,7 +3,7 @@
 lapply(c('data.table','dplyr','ggplot2','shiny','shinydashboard',
          'shinythemes','leaflet','DT','plotly','scales'), library, character.only = TRUE)
 
-setwd('/Users/hunterjohnson/Desktop/Dashboards/US Crime/Supplementary Homicide Reports/')
+#setwd('/Users/hunterjohnson/Desktop/Dashboards/US Crime/Supplementary Homicide Reports/')
 
 #====================================================================================================
 # Read in data
@@ -80,7 +80,7 @@ pal <- colorFactor(
 )
 
 # Map
-leaf_map <- leaflet(states_shp) %>% 
+leaf_map <- leaflet(states_shp) %>%
   addProviderTiles(providers$OpenStreetMap) %>%
   addPolygons(layerId = ~NAME,
               weight = 1,

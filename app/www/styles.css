@@ -14,15 +14,17 @@
 .skin-blue .main-header .navbar .sidebar-toggle:hover{
                              background-color: #556d7e;
 }
-       
+
 .box.box-solid.box-primary>.box-header {
 color:#fff;
 background:#3c4f58;
 }
 
 .box.box-solid.box-primary{
-border-bottom-color:#3c4f58;
+/*border-bottom-color:#3c4f58;
 border-left-color:#3c4f58;
 border-right-color:#3c4f58;
 border-top-color:#3c4f58;
+*/
+border: #3c4f58 solid 1px;
 }
