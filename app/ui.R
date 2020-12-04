@@ -2,62 +2,128 @@
 
 #====================================================================================================
 
-header <- dashboardHeader(title = 'U.S. Homicide Demographics', dropdownMenuOutput("messageMenu"))
+header <- dashboardHeader(title = 'FBI Supplementary Homicide Reports', dropdownMenuOutput("messageMenu"), titleWidth = 280)
 
 sidebar <- dashboardSidebar(
+  width = 280,
   sidebarMenu(
-    # Select state
-    selectInput( 'selected_state',
-                 label = 'Select State',
-                 choices = c('United States', sort(unique(states_shp$NAME))) ),
-    # Select variables
-    selectizeInput( 'selected_vars',
-                    label = 'Select Variables',
-                    choices = plotly_input_vars_both,
-                    multiple = T,
-                    options = list(maxItems = 7,
-                                   placeholder = 'Choose up to seven variables'),
-                    selected = c('Total Offenders','Total Victims') ),
-    # Select year
-    selectInput( 'selected_year', label = 'Select Year', choices = c(2019:1985) ),
     
-    # Select demographics
-    radioButtons( 'selected_demog', label = 'Select Race/Sex',
-                  choices = c('Race','Sex','Both'),
-                  selected = 'Race', inline = TRUE )
+    # MAIN DATA SELECT
+    selectInput( 'selected_category',
+                 label = 'Data Category',
+                 choices = c('Demographics',
+                             'Victim/Offender Relationship',
+                             'Weapon',
+                             'Circumstances') ),
+    
+    # DEMOGRAPHIC PANEL
+    conditionalPanel(
+      condition = "input.selected_category == 'Demographics'",
+      # Select state
+      selectInput( 'selected_state_demog',
+                   label = 'State',
+                   choices = c('United States', sort(unique(main_df_wide[which(main_df_wide$State != 'United States'),'State']))) ),
+      # Select year
+      selectInput( 'selected_year_demog', label = 'Year', choices = c(2019:1985) ),
+      # Select variables
+      selectizeInput( 'selected_vars_demog',
+                      label = 'Demographic Group',
+                      choices = trend_inp_vars_demog_both,
+                      multiple = T,
+                      options = list(maxItems = 7,
+                                     placeholder = 'Choose up to seven variables'),
+                      selected = c('Total Offenders','Total Victims') ),
+      # Select demographics
+      radioButtons( 'selected_demog', label = 'Race/Sex',
+                    choices = c('Race','Sex','Both'),
+                    selected = 'Race', inline = TRUE )
+    ),
+    
+    # VICTIM/OFFENDER RELATION PANEL
+    conditionalPanel(
+      condition = "input.selected_category == 'Victim/Offender Relationship'",
+      # Select state
+      selectInput( 'selected_state_vic_off',
+                   label = 'State',
+                   choices = c('United States', sort(unique(main_df_wide[which(main_df_wide$State != 'United States'),'State']))) ),
+      # Select year
+      selectInput( 'selected_year_vic_off', label = 'Year', choices = c(2019:1985) ),
+      # Select variables
+      selectizeInput( 'selected_vars_vic_off',
+                      label = 'Victim Relation to Offender',
+                      choices = trend_inp_vars_vic_off,
+                      multiple = T,
+                      options = list(maxItems = 7,
+                                     placeholder = 'Choose up to seven variables'),
+                      selected = c('Total Offenses','Unknown','Stranger') )
+    ),
+    
+    # WEAPON PANEL
+    conditionalPanel(
+      condition = "input.selected_category == 'Weapon'",
+      # Select state
+      selectInput( 'selected_state_weapon',
+                   label = 'State',
+                   choices = c('United States', sort(unique(main_df_wide[which(main_df_wide$State != 'United States'),'State']))) ),
+      # Select year
+      selectInput( 'selected_year_weapon', label = 'Year', choices = c(2019:1985) ),
+      # Select variables
+      selectizeInput( 'selected_vars_weapon',
+                      label = 'Weapon Used',
+                      choices = trend_inp_vars_weap,
+                      multiple = T,
+                      options = list(maxItems = 7,
+                                     placeholder = 'Choose up to seven variables'),
+                      selected = c('Total Offenses','Handgun','Rifle') )
+    ),
+    
+    # CIRCUMSTANCES PANEL
+    conditionalPanel(
+      condition = "input.selected_category == 'Circumstances'",
+      # Select state
+      selectInput( 'selected_state_circ',
+                   label = 'State',
+                   choices = c('United States', sort(unique(main_df_wide[which(main_df_wide$State != 'United States'),'State']))) ),
+      # Select year
+      selectInput( 'selected_year_circ', label = 'Year', choices = c(2019:1985) ),
+      # Select variables
+      selectizeInput( 'selected_vars_circ',
+                      label = 'Circumstances',
+                      choices = trend_inp_vars_circ,
+                      multiple = T,
+                      options = list(maxItems = 7,
+                                     placeholder = 'Choose up to seven variables'),
+                      selected = c('Total Offenses','Unknown') )
+    )
+    
   )
 )
 
 body <- dashboardBody(
   
-  # Custom CSS
+  # CUSTOM CSS
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "styles.css")
   ),
   
-  # Time series
+  # TIME SERIES
   fluidRow(
     uiOutput('trend_box')
   ),
   
-  # U.S. map and pie charts
+  # PIE CHART
   fluidRow(
-    box(width = 4, solidHeader = T, status = 'primary',
-        title = 'U.S. Map',
-        leafletOutput('us_map')
-    ),
     uiOutput('pie_box')
   ),
   
-  # Data table
+  # BAR CHART
   fluidRow(
-    box(
-      width = 12, collapsible = T,
-      title = paste0('Table of U.S. Homicides, 1985 - 2019'),
-      solidHeader = T, status = 'primary',
-      dataTableOutput('shr_table'),
-      downloadButton("downloadData", "Download")
-    )
+    uiOutput('bar_box')
+  ),
+  
+  # DATA TABLE
+  fluidRow(
+    uiOutput('table_box')
   )
   
 )
